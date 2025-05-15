@@ -1,0 +1,285 @@
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+const Coding = () => {
+  const location = useLocation();
+  const { code } = location.state || {};
+
+  const [sidebarWidth, setSidebarWidth] = useState(80);
+  const [isDraggingSidebar, setIsDraggingSidebar] = useState(false);
+  const [isTerminalVisible, setIsTerminalVisible] = useState(false);
+  const [terminalHeight, setTerminalHeight] = useState(200);
+  const [isDraggingTerminal, setIsDraggingTerminal] = useState(false);
+
+  // Sidebar resizing logic
+  const handleMouseMoveSidebar = (e) => {
+    if (isDraggingSidebar) {
+      const newWidth = e.clientX;
+      setSidebarWidth(Math.max(60, Math.min(300, newWidth)));
+    }
+  };
+
+  const handleMouseUpSidebar = () => {
+    setIsDraggingSidebar(false);
+    document.removeEventListener('mousemove', handleMouseMoveSidebar);
+    document.removeEventListener('mouseup', handleMouseUpSidebar);
+  };
+
+  const handleMouseDownSidebar = () => {
+    setIsDraggingSidebar(true);
+    document.addEventListener('mousemove', handleMouseMoveSidebar);
+    document.addEventListener('mouseup', handleMouseUpSidebar);
+  };
+
+  // Terminal resizing logic
+  const handleMouseMoveTerminal = (e) => {
+    if (isDraggingTerminal) {
+      const newHeight = window.innerHeight - e.clientY;
+      setTerminalHeight(Math.max(100, newHeight));
+    }
+  };
+
+  const handleMouseUpTerminal = () => {
+    setIsDraggingTerminal(false);
+    document.removeEventListener('mousemove', handleMouseMoveTerminal);
+    document.removeEventListener('mouseup', handleMouseUpTerminal);
+  };
+
+  const handleMouseDownTerminal = () => {
+    setIsDraggingTerminal(true);
+    document.addEventListener('mousemove', handleMouseMoveTerminal);
+    document.addEventListener('mouseup', handleMouseUpTerminal);
+  };
+
+  return (
+    <div style={styles.container}>
+      {/* Sidebar */}
+      <div style={{ ...styles.sidebar, width: `${sidebarWidth}px` }}>
+        <div style={styles.sidebarHeader}>Project Explorer</div>
+        {['main.py', 'utils.py', 'app.py'].map((item) => (
+          <button key={item} style={styles.sidebarButton}>
+            {item}
+          </button>
+        ))}
+        <button style={styles.terminalButton} onClick={() => setIsTerminalVisible(!isTerminalVisible)}>
+          Terminal
+        </button>
+        <div
+          style={styles.sidebarResizer}
+          onMouseDown={handleMouseDownSidebar}
+        />
+      </div>
+
+      {/* Main Content */}
+      <div style={styles.mainContent}>
+        <div style={styles.tabBar}>
+          <span style={styles.activeTab}>main.py</span>
+          <span style={styles.tab}>utils.py</span>
+          <span style={styles.tab}>app.py</span>
+        </div>
+        <pre style={styles.codeBox}>{code || `# Start coding...`}</pre>
+      </div>
+
+      {/* Terminal */}
+      {isTerminalVisible && (
+        <div style={{ ...styles.terminal, height: `${terminalHeight}px` }}>
+          <div id="terminal">
+            <div id="output" style={styles.output}></div>
+            <input
+              type="text"
+              id="input"
+              style={styles.input}
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const command = e.target.value;
+                  const output = document.getElementById('output');
+                  output.innerHTML += `> ${command}<br>`;
+                  processCommand(command);
+                  e.target.value = '';
+                  output.scrollTop = output.scrollHeight;
+                }
+              }}
+            />
+          </div>
+          <div
+            style={styles.terminalResizer}
+            onMouseDown={handleMouseDownTerminal}
+          />
+        </div>
+      )}
+    </div>
+  );
+
+  function processCommand(command) {
+    const output = document.getElementById('output');
+    const lowerCommand = command.toLowerCase();
+    if (lowerCommand === 'hello') {
+      output.innerHTML += 'Hello, user!<br>';
+    } else if (lowerCommand === 'date') {
+      output.innerHTML += new Date().toString() + '<br>';
+    } else if (lowerCommand === 'clear') {
+      output.innerHTML = '';
+    } else {
+      output.innerHTML += `Unknown command: ${command}<br>`;
+    }
+  }
+};
+
+const styles = {
+  container: {
+    display: 'flex',
+    height: '100vh',
+    backgroundColor: '#2b2b2b',
+    color: '#dcdcdc',
+    fontFamily: 'Consolas, monospace',
+    position: 'relative',
+    flexDirection: 'column',
+  },
+
+  sidebar: {
+    backgroundColor: '#1e1e1e',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '10px',
+    borderRight: '1px solid #444',
+    position: 'relative',
+    transition: 'width 0.3s ease-in-out',
+  },
+
+  sidebarHeader: {
+    color: '#61afef',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+    fontSize: '16px',
+  },
+
+  sidebarButton: {
+    backgroundColor: '#1e1e1e',
+    color: '#dcdcdc',
+    border: '1px solid #444',
+    padding: '8px 12px',
+    margin: '6px 0',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    width: '100%',
+    textAlign: 'center',
+    fontSize: '14px',
+    transition: 'background 0.3s',
+  },
+
+  terminalButton: {
+    backgroundColor: '#1e1e1e',
+    color: '#61afef',
+    border: '1px solid #444',
+    padding: '8px 12px',
+    margin: '10px 0',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    width: '100%',
+    textAlign: 'center',
+    fontSize: '14px',
+    transition: 'background 0.3s',
+  },
+
+  sidebarResizer: {
+    backgroundColor: '#61afef',
+    width: '5px',
+    cursor: 'ew-resize',
+    position: 'absolute',
+    right: '0',
+    top: '0',
+    bottom: '0',
+    transition: 'background 0.3s ease-in-out',
+  },
+
+  mainContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '10px',
+    backgroundColor: '#2b2b2b',
+  },
+
+  tabBar: {
+    display: 'flex',
+    backgroundColor: '#1e1e1e',
+    padding: '5px',
+    borderBottom: '1px solid #444',
+  },
+
+  activeTab: {
+    padding: '5px 10px',
+    backgroundColor: '#61afef',
+    color: '#000',
+    borderRadius: '4px',
+    marginRight: '8px',
+    fontWeight: 'bold',
+  },
+
+  tab: {
+    padding: '5px 10px',
+    backgroundColor: '#1e1e1e',
+    color: '#dcdcdc',
+    borderRadius: '4px',
+    marginRight: '8px',
+    cursor: 'pointer',
+    transition: 'background 0.2s',
+  },
+
+  codeBox: {
+    backgroundColor: '#1e1e1e',
+    padding: '15px',
+    borderRadius: '5px',
+    overflowX: 'auto',
+    whiteSpace: 'pre-wrap',
+    fontSize: '14px',
+    color: '#dcdcdc',
+    border: '1px solid #444',
+    flex: 1,
+    transition: 'background 0.3s',
+  },
+
+  terminal: {
+    backgroundColor: '#000',
+    color: '#dcdcdc',
+    padding: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'fixed',
+    bottom: '0',
+    width: '100%',
+    borderTop: '2px solid #61afef',
+    transition: 'height 0.3s ease-in-out',
+  },
+
+  output: {
+    background: '#000',
+    color: '#dcdcdc',
+    padding: '10px',
+    overflowY: 'auto',
+    height: '100%',
+  },
+
+  input: {
+    background: 'transparent',
+    border: 'none',
+    color: '#dcdcdc',
+    outline: 'none',
+    fontSize: '16px',
+    marginTop: '5px',
+    width: '100%',
+  },
+
+  terminalResizer: {
+    backgroundColor: '#61afef',
+    height: '5px',
+    cursor: 'ns-resize',
+    position: 'fixed',
+    bottom: '0',
+    width: '100%',
+    transition: 'background 0.3s',
+  },
+};
+
+export default Coding;

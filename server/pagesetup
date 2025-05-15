@@ -1,0 +1,23 @@
+mern-chat-ai-developer/
+├── client/                  # React Frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── components/     # Reusable UI components
+│   │   ├── pages/          # Application pages (Dashboard, Chat, etc.)
+│   │   ├── services/       # API calls and external integrations
+│   │   ├── App.js          # Root component
+│   │   └── index.js        # App entry point
+│   └── package.json        # Frontend dependencies
+├── server/                 # Node.js Backend
+│   ├── controllers/        # Business logic
+│   ├── models/             # MongoDB models
+│   ├── routes/             # API endpoints
+│   ├── middleware/         # Authentication & error handling
+│   ├── config/             # DB connection & environment configs
+│   ├── utils/              # Helper functions
+│   └── server.js           # Main server file
+├── .env                    # Environment variables
+├── .gitignore              # Git ignore rules
+├── README.md               # Project documentation
+├── package.json            # Root dependencies
+└── docker-compose.yml      # (Optional) Docker setup

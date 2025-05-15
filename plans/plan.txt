@@ -1,0 +1,5 @@
+1. keeping list of all texts in array and store it in db, and there will a button to see history 
+2. add version control and store the codebase in server
+3. add terminal to push commit and 
+4. version control will be in different 
+5. show the description of terminal in rpject description .
