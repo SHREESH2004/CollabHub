@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "build": "echo 'Nothing to build'"
+  },
   "dependencies": {
     "remixicon": "^4.6.0"
   }
