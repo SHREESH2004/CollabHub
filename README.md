@@ -91,17 +91,7 @@ npm start
 5. 🚀 Ship code, manage versions with StarGit
 6. 🤖 Let AI help you scale faster
 
----
 
-## 🌌 Screenshots
-
-<p align="center">
-  <img src="https://your-image-link.com/dashboard-preview.png" width="800" alt="Dashboard UI"/>
-  <br />
-  <em>Modern, minimal, and made for makers.</em>
-</p>
-
----
 
 ## 🧩 Contribute Like a Pro
 
