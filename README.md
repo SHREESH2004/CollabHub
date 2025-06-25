@@ -1,14 +1,13 @@
 
-<h1 align="center">🚀 CollabHub</h1>
-<p align="center"><em>Build. Collaborate. Scale. Repeat.</em></p>
+<h1 align="center">🌐 CollabHub — The Ultimate MERN Dev Collaboration Platform 🚀</h1>
+<p align="center"><em>Real-time collabs. Smart coding. Built by devs, for devs.</em></p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Stack-MERN-00d8ff?style=for-the-badge&logo=react" />
   <img src="https://img.shields.io/badge/Made%20For-Devs-38bdf8?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Powered%20By-AI%20%2B%20Realtime-blueviolet?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Version-Control-StarGit-black?style=for-the-badge" />
 </p>
 
----
 
 ## 💡 What is CollabHub?
 
